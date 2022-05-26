@@ -6,6 +6,9 @@ import pandas as pd
 import numpy as np
 from yaml import load
 from config import config
+from nltk import ngrams
+import re
+
 
 
 class SwissDialDataset():
@@ -138,6 +141,40 @@ class SwissDialDataset():
             df_tf_idf = df_tf_idf[df_tf_idf['tf_idf'] <= config['stopwords_threshold_tf_idf']]
             self.stopwords = df_tf_idf['word'].tolist()
 
+
+    """
+    Remove unused data-columns and -rows and create n-grams
+    """
+    def preprocessing(self):
+        self.properties.append('preprocessed')
+        # TODO: loading csv results in strings instead of lists for each n_gram list. 
+        #if not self.load_processed():
+            # remove the high german sentences
+        self.df.drop(self.df.index[self.df['dialect'] == 'de'], inplace=True)
+
+        # lowercase the sentences and generate their 4-grams
+        self.df['sentence_version'] = self.df['sentence_version'].apply(lambda x: x.lower())
+        for n in config['n']:
+            self.df[f'{n}_grams'] = self.df['sentence_version'].apply(lambda x: self.create_ngrams(x, n))
+            
+
+        # remove the unneeded columns
+        self.df.drop(labels=['sentence_id', 'sentence_version', 'topic', 'code_switching'], axis=1, inplace=True)
+        self.save_processed()
+        #else:
+        #    print('loaded preprocessed dataframe')
+
+
+    def create_ngrams(self, sentence, n):
+        n_grams = []
+        for i in sentence.split():
+            words_n_grams = list(ngrams(' ' + i + ' ', n))
+            for word_n_grams in words_n_grams:
+                word_n_grams_joined = ''.join(word_n_grams)
+                if word_n_grams_joined == " " or word_n_grams_joined == "  ":
+                    continue
+                n_grams.append(word_n_grams_joined)
+        return n_grams
 
 
 
