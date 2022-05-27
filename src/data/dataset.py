@@ -159,7 +159,7 @@ class SwissDialDataset():
             
 
         # remove the unneeded columns
-        self.df.drop(labels=['sentence_id', 'sentence_version', 'topic', 'code_switching'], axis=1, inplace=True)
+        self.df.drop(labels=['sentence_id', 'topic', 'code_switching'], axis=1, inplace=True)
         self.save_processed()
         #else:
         #    print('loaded preprocessed dataframe')

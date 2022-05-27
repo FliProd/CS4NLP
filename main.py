@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from config import config
 from src.data.dataset_exploration import explore
 from src.train.train import train
+from src.test.test import test
 from src.data.dataset import SwissDialDataset
 from src.models.models import Models
 
@@ -27,14 +28,14 @@ def main():
     df_y = dataset.df[['dialect']]
     X_train, X_test, y_train, y_test = train_test_split(df_X, df_y, test_size=0.2, random_state=420)
 
-    X_train.insert(0, 'dialect', y_train)
+    X_train.insert(0, 'dialect', y_train.squeeze())
     df_train = X_train
-    X_test.insert(0, 'dialect', y_test)
+    X_test.insert(0, 'dialect', y_test.squeeze())
     df_test = X_test
-
 
     train(df_train, models.models)
     
+    test(df_test, models.models)
     
 
 

@@ -24,3 +24,12 @@ config['symbols_to_remove'] = ['"', '«', '»', '.', ',', '?', '!', '(', ')', '[
 
 config['stopwords_threshold_total'] = 200
 config['stopwords_threshold_tf_idf'] = 0.09
+
+
+"""
+HeLI model settings
+"""
+
+# p = penalty value used in equation 6 
+# They used 5.8
+config['penalty_p'] = 5.8
