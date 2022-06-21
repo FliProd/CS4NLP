@@ -1,47 +1,31 @@
 
-from tokenize import Expfloat
-import pandas as pd
+import argparse
 
-from sklearn.model_selection import train_test_split
-from config import config
-from src.data.dataset_exploration import explore
-from src.train.train import train
-from src.test.test import test
-from src.data.dataset import SwissDialDataset
-from src.models.models import Models
+from config import Config
+from src.data.runner_dataset import get_dataset
+from src.models.runner_models import get_model
+from src.preprocessing.runner_preprocessing import get_preprocessing
 
-def main():    
+def run(args):
+    config = Config()
 
-    # load data from json or preprocessed csv
-    dataset = SwissDialDataset(numbers=config['numbers'])
-    dataset.load_data()
-    #dataset.balance()
-    dataset.remove_symbols()
-    #dataset.find_stop_words(method='tf_idf')
-    dataset.preprocessing()
+    preprocessing = get_preprocessing(config)
+
+    dataset = get_dataset(config.datasets, preprocessing)
+
+    model = get_model(config, dataset)
+
+    if not args.evaluate:
+        model.train()
+
+    # TODO: Add step to store model
     
-    #explore(dataset.df)
-
-    models = Models()
-    
-    df_X = dataset.df.drop(labels=['dialect'], axis=1, inplace=False)
-    df_y = dataset.df[['dialect']]
-    X_train, X_test, y_train, y_test = train_test_split(df_X, df_y, test_size=0.2, random_state=420)
-
-    X_train.insert(0, 'dialect', y_train.squeeze())
-    df_train = X_train
-    X_test.insert(0, 'dialect', y_test.squeeze())
-    df_test = X_test
-
-    train(df_train, models.models)
-    
-    test(df_test, models.models)
-    
-
-
-
-
-
+    if not args.train:
+        model.test()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train", "-t", action="store_true", help="Only run training")
+    parser.add_argument("--evaluate", "-e", action="store_true", help="Only run testing")
+    args = parser.parse_args()
+    run(args)
