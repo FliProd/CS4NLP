@@ -34,7 +34,9 @@ class DefaultPreprocessor():
     def preprocess(self, raw_data: pd.DataFrame, datasetname: str) -> pd.DataFrame:
         # First check if processed data already exists
         path = self.config["processed_data_path"] + datasetname + "/" + self.path + ".csv"
-        data = self.load_processed(path)
+        data = None
+        if not self.config["no_load"]:
+            data = self.load_processed(path)
         if data is None:
             # If processed data does not exist, do preprocessing
             data = raw_data
@@ -82,7 +84,7 @@ class DefaultPreprocessor():
             return data
         sentence_id_to_count = data.groupby('sentence_id')['sentence_version'].count().reset_index(name='count')
         data = pd.merge(data, sentence_id_to_count, on='sentence_id')
-        data = data[data['count'] == self.config["n_dialects"]].drop('count', axis=1)
+        data = data[data['count'] == self.config["n_dialects"] + 1].drop('count', axis=1)
         return data
 
     """

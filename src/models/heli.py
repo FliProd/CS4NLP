@@ -8,6 +8,7 @@ import src.utils.utils as util
 
 class Heli():
     def __init__(self, config: dict, dataset: object) -> None:
+        self.name = "Heli"
         self.config = config
         self.dataset = dataset
         self.state = {}
@@ -18,6 +19,8 @@ class Heli():
 
     def count_ngrams(self, row: dict) -> None:
         dialect = row['dialect']
+        if not dialect in self.state.keys():
+            return
         for n in self.config['n']:
             nstring = f'{n}_grams'
             for ngram in row[nstring]:
