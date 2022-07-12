@@ -72,13 +72,16 @@ def main(args):
         for combination in datasetcombinations:
             if len(combination["datasets"]) == 1:
                 config.datasets = copy.deepcopy(dataset_config[combination["datasets"][0]])
+                config.datasets["dialects"].sort()
             else:
                 config.datasets = copy.deepcopy(dataset_config["multiple"])
                 for dataset in combination["datasets"]:
-                    config.datasets["datasets"].append(dataset_config[dataset])
+                    config.datasets["datasets"].append(copy.deepcopy(dataset_config[dataset]))
                     config.datasets["dialects"] = list(set(config.datasets["dialects"]) | set(dataset_config[dataset]["dialects"]))
+                config.datasets["dialects"].sort()
+                for dataset in config.datasets["datasets"]:
+                    dataset["dialects"] = config.datasets["dialects"]
             args.name = combination["name"]
-            print(config.datasets)
             run(args, config)
 
     if not args.training:
@@ -89,10 +92,11 @@ def main(args):
             for test_combination in datasetcombinations:
                 if len(test_combination["datasets"]) == 1:
                     config.datasets = copy.deepcopy(dataset_config[test_combination["datasets"][0]])
+                    config.datasets["dialects"].sort()
                 else:
                     config.datasets = copy.deepcopy(dataset_config["multiple"])
                     for dataset in test_combination["datasets"]:
-                        config.datasets["datasets"].append(dataset_config[dataset])
+                        config.datasets["datasets"].append(copy.deepcopy(dataset_config[dataset]))
                         config.datasets["dialects"] = list(set(config.datasets["dialects"]) | set(dataset_config[dataset]["dialects"]))
                 train_dialects = []
                 if len(train_combination["datasets"]) == 1:
@@ -101,8 +105,11 @@ def main(args):
                     for dataset in train_combination["datasets"]:
                         train_dialects = list(set(train_dialects) | set(dataset_config[dataset]["dialects"]))
                 config.datasets["dialects"] = list(set(train_dialects) & set(config.datasets["dialects"]))
+                config.datasets["dialects"].sort()
+                if len(test_combination["datasets"]) > 1:
+                    for dataset in config.datasets["datasets"]:
+                        dataset["dialects"] = config.datasets["dialects"]
                 args.name = train_combination["name"]
-                print(config.datasets)
                 print("Testing {} on model trained on {}".format(test_combination["name"], train_combination["name"]))
                 run(args, config)
 
