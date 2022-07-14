@@ -28,7 +28,8 @@ class GdiVardial():
     def load_data(self) -> None:
         try:
             rows = []
-            with open(self.config["raw_data_path"], 'r') as f:
+            dataset_idx = self.config["datasetnames_to_indices"][self.config["name"]]
+            with open(self.config["datasets"][dataset_idx]["raw_data_path"], 'r') as f:
                 lines = f.readlines()
             for line in lines:
                 splitted_line = line.rsplit("\t", 1)
