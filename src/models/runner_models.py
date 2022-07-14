@@ -6,6 +6,7 @@ import shutil
 import os
 from datetime import datetime as dt
 from numpy import object0
+from src.models.adaptive_heli import adaptive_Heli
 from src.models.heli import Heli
 from src.models.svm import SVM
 from config import Config
@@ -16,6 +17,8 @@ def get_model(config: Config, dataset: object) -> object:
         return Heli(config=config.model, dataset=dataset)
     elif model_name == "SVM":
         return SVM(config=config.model, dataset=dataset)
+    elif model_name == "adaptive_HeLi":
+        return adaptive_Heli(config=config.model, dataset=dataset)
     else:
         print("Invalid Model specified. Aborting")
         raise NotImplementedError
