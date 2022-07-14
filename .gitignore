@@ -6,3 +6,6 @@ csnlp/*
 
 # processed data
 data/processed/*
+
+# models
+models/*

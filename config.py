@@ -38,8 +38,10 @@ class Config():
                 "removeSymbols",
                 "nGrams"
             ],
+            "n_dialects": 8,
             "processed_data_path": "data/processed/",
-            "no_store": False,
+            "no_store": True,
+            "no_load": True,
             "n": [1,2,3,4],
             "symbols_to_remove": ['"', '«', '»', '.', ',', '?', '!', '(', ')', '[', ']', '&'],
             "stopwords_threshold_total": 200,

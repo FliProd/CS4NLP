@@ -36,6 +36,8 @@ class GdiVardial():
                 sentence = splitted_line[0]
                 dialect = splitted_line[1].replace("\n", "")
                 dialect = GdiVardial.dialect_mapping[splitted_line[1].replace("\n", "")]
+                if not dialect in self.config["dialects"]:
+                    continue
                 rows.append([dialect, sentence])
             self.n_rows = len(rows)
             self.data = pd.DataFrame(rows, columns=['dialect', 'sentence_version'])
