@@ -130,12 +130,14 @@ class adaptive_Heli():
         while predictions.isnull().sum() > cutoff:
             if predictions.isnull().sum() % 100 == 0:
                 print(predictions.isnull().sum() - cutoff, "NaN values remaining")
-
+           
             confidence = df_test.apply(lambda x:  pd.Series(self.get_cm(x, self.config["n_eval"]), index=['confidence', 'prediction']), axis=1)
             confidence = confidence.sort_values(by=["confidence"], ascending=False)
             highest_conf = confidence.iloc[0]
             predicted_dialect = highest_conf.loc["prediction"]
             predictions[highest_conf.name] = predicted_dialect
+            self.update_scores(df_test.loc[highest_conf.name], predicted_dialect)
+
             df_test = df_test.drop(highest_conf.name, axis=0)
 
         return predictions
@@ -152,12 +154,13 @@ class adaptive_Heli():
         X_test, Y_test = self.dataset.get_test_data()
         X_test.insert(0, 'dialect', Y_test.squeeze())
         df_test = X_test
+        
         n = self.config["n_eval"]
-        X_test = X_test
+        X_test = X_test[["sentence_version", f"{n}_grams"]]
         predictions = pd.Series(NaN, X_test.index)
         cutoff = int(self.config["cutoff"] * len(predictions.index))
         if cutoff > len(predictions.index) or cutoff < 0: 
-            print("Invalid cutoff value, choose between 0 and 1. Aborting")
+            print("Invalid cutoff value, choose number in between 0 and 1. Aborting")
             raise RuntimeError
         self.adaptive_prediction(X_test, predictions, cutoff, n)
         if cutoff > 0:
