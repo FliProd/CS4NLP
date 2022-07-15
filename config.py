@@ -56,8 +56,9 @@ EXPLANATION OF CONFIG:
 self.model defines which model to use:
     "name":         Name of the model, matched in /models/runner_models.py
         Valid options: 
-            - "HeLi" -> creates instance of class Heli (/models/heli.py)
-            - "SVM"  -> creates instance of class SvM (/models/svm.py)
+            - "HeLi"            -> creates instance of class Heli (/models/heli.py)
+            - "SVM"             -> creates instance of class SvM (/models/svm.py)
+            - "adaptive_HeLi"   -> creates instance of class adaptive_Heli (/models/adaptive_heli.py)
     "n":            Size of n-grams used in training. Must be of type list
     "n_eval":       Size of n-gram used for evaluation. Must be of type int
     "penalty_p":    Specific value for (adaptive) Heli-model. Penalty added if no n-gram of word present (c.f. eq. 6 in Heli paper)
