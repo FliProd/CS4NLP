@@ -1,4 +1,4 @@
-# Project Title
+# Swiss Dialect Identification
 
 This is the code for our project in the computational semantics for NLP course. Developers are Marc Styger, Christopher Raffl and Noah Hampp.
 
