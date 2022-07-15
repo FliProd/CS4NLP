@@ -9,7 +9,7 @@ The data/ folder contains the raw data of the GDI VarDial 2027 and 2018 workshop
 
 To run a certain model on the desired dataset set the following in the config.py file in the root directory.
 
-- choose the model by setting "name" in self.model object (options: HeLi, SVM)
+- choose the model by setting "name" in self.model object (options: HeLi, adaptive_Heli, SVM)
 - choose dataset by setting the "name" in self.datasets to one of the names contained in a dataset object in the "datasets" arrays.
 - copy the datasets "dialects" array to self.datasets "dialects" field
 - set "n_dialects" in self.model to the number of dialects in the chosen dataset
@@ -24,6 +24,7 @@ To use a preloaded SVM model edit the model_name in src/models/svm.py on line 10
         - Valid options: 
             - "HeLi" -> creates instance of class Heli (/models/heli.py)
             - "SVM"  -> creates instance of class SvM (/models/svm.py)
+            - "adaptive_HeLi"   -> creates instance of class adaptive_Heli (/models/adaptive_heli.py)
     - "n":            Size of n-grams used in training. Must be of type list
     - "n_eval":       Size of n-gram used for evaluation. Must be of type int
     - "penalty_p":    Specific value for Heli-model. Penalty added if no n-gram of word present (c.f. eq. 6 in Heli paper)
