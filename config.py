@@ -60,7 +60,8 @@ self.model defines which model to use:
             - "SVM"  -> creates instance of class SvM (/models/svm.py)
     "n":            Size of n-grams used in training. Must be of type list
     "n_eval":       Size of n-gram used for evaluation. Must be of type int
-    "penalty_p":    Specific value for Heli-model. Penalty added if no n-gram of word present (c.f. eq. 6 in Heli paper)
+    "penalty_p":    Specific value for (adaptive) Heli-model. Penalty added if no n-gram of word present (c.f. eq. 6 in Heli paper)
+    "cutoff":       Specific value for adaptive HeLi-model. Number between 0 and 1 setting the proportion of data predicted with normal HeLi
     "n_dialects":   number of dialects in the chosen dataset
 
 self.datasets defines which dataset(s) to use:
