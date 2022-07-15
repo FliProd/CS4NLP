@@ -1,26 +1,34 @@
 
-from tokenize import Expfloat
-from config import config
-from src.data.dataset_exploration import explore
-from src.train.train import train
-from src.data.dataset import SwissDialDataset
+import argparse
 
-def main():    
+from config import Config
+from src.data.runner_dataset import get_dataset
+from src.models.runner_models import get_model, store_model, load_model
+from src.preprocessing.runner_preprocessing import get_preprocessing
 
-    # load data from json or preprocessed csv
-    dataset = SwissDialDataset(numbers=config['numbers'])
-    dataset.load_data()
-    dataset.balance()
-    dataset.remove_symbols()
-    dataset.find_stop_words(method='tf_idf')
+def run(args, config=None):
+    config = Config() if config == None else config
 
+    preprocessing = get_preprocessing(config)
 
-    #explore(dataset.df)
+    dataset = get_dataset(config.datasets, preprocessing)
 
-
-
-
-
+    if not args.evaluate:
+        model = get_model(config, dataset)
+        model.train()
+        if args.store:
+            store_model(model, args.name)
+    
+    if not args.train:
+        if args.name:
+            model = load_model(args.name, dataset)
+        model.test()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train", "-t", action="store_true", help="Only run training")
+    parser.add_argument("--store", "-s", action="store_true", help="Store trained model")
+    parser.add_argument("--evaluate", "-e", action="store_true", help="Only run testing")
+    parser.add_argument("--name", "-n", type=str, help="Name of the model to load/store (i.e. the directory)")
+    args = parser.parse_args()
+    run(args)
