@@ -100,7 +100,7 @@ class SVM():
 
         # train a  model per dialect
         for i in range(0,self.n):
-            model_name = 'models/d' + str(i) + '_vardial18_linear_c1.model'
+            model_name = 'models/d' + str(i) + '_vardial17_linear_c1.model'
             # try and load model from storage
             m = svm_load_model(model_name)
 

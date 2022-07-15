@@ -1,15 +1,16 @@
 class Config():
     def __init__(self):
         self.model = {
-            "name": "HeLi",
+            "name": "SVM",
             "n": [1,2,3,4],
             "n_eval": 4,
-            "penalty_p": 5.8
+            "penalty_p": 5.8,
+            "n_dialects": 4
         }
         self.datasets = {
-            "name": "Multiple",
+            "name": "gdi-vardial-2017",
             "split": 0.2,
-            "dialects": ['ch_sg', 'ch_be', 'ch_gr', 'ch_zh', 'ch_vs', 'ch_bs', 'ch_ag', 'ch_lu'],
+            "dialects": ["ch_bs", "ch_lu", "ch_be", "ch_zh"],
             "datasets": [
                 {
                     "name": "SwissDial",
@@ -30,6 +31,7 @@ class Config():
                     "dialects": ["ch_bs", "ch_lu", "ch_be", "ch_zh", "ch_vs"]
                 }
             ],
+            "datasetnames_to_indices": {"SwissDial": 0, "gdi-vardial-2017": 1, "gdi-vardial-2018": 2},
             "no_individual_preprocessing": True
         }
         self.preprocessing = {
@@ -55,10 +57,12 @@ self.model defines which model to use:
     "name":         Name of the model, matched in /models/runner_models.py
         Valid options: 
             - "HeLi" -> creates instance of class Heli (/models/heli.py)
+            - "SVM"  -> creates instance of class SvM (/models/svm.py)
     "n":            Size of n-grams used in training. Must be of type list
     "n_eval":       Size of n-gram used for evaluation. Must be of type int
     "penalty_p":    Specific value for (adaptive) Heli-model. Penalty added if no n-gram of word present (c.f. eq. 6 in Heli paper)
     "cutoff":       Specific value for adaptive HeLi-model. Number between 0 and 1 setting the proportion of data predicted with normal HeLi
+    "n_dialects":   number of dialects in the chosen dataset
 
 self.datasets defines which dataset(s) to use:
     "name":          Name of the dataset, matched in /data/runner_dataset.py
@@ -70,6 +74,7 @@ self.datasets defines which dataset(s) to use:
     "split":        Size of test-split. Must be between 0.0 and 1.0
     "dialects":     dialects that are part of the dataset
     "datasets":     Only used for MultipleDataset. List of datasets, follow the same structure
+    "datasetnames_to_indices": used to get the correct dataset object
     "no_individiual_peprocessing":  Only used for MultipleDataset. If set to true, first data is combined and then preprocessed.
                                         Otherwise, all datasets are preprocessed individually. Must be of type bool
 self.preprocessing defines which preprocesser to use:
