@@ -24,8 +24,7 @@ class SwissDial():
 
     def load_data(self) -> None:
         try:
-            dataset_idx = self.config["datasetnames_to_indices"][self.config["name"]]
-            with open(self.config["datasets"][dataset_idx]["raw_data_path"], 'r') as json_f:
+            with open(self.config["raw_data_path"], 'r') as json_f:
                 json_dataset = json.load(json_f)
         except FileNotFoundError:
             print("Dataset not found, invalid path. Abort")
